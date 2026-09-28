@@ -38,7 +38,7 @@ public class MainActivity extends Activity {
 
     private static final String TAG = "USBCam";
     /** App version shown to users; compare against the latest GitHub release tag. */
-    private static final String APP_VERSION = "1.1.0";
+    private static final String APP_VERSION = "1.1.1";
     private static final String GITHUB_OWNER = "ciomid1097-arch";
     private static final String GITHUB_REPO = "USBCam";
     private static final String RELEASES_PAGE =

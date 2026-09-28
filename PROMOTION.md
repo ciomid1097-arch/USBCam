@@ -45,7 +45,7 @@ SpiMp3 direct APK: https://github.com/ciomid1097-arch/SpiMp3/releases/latest
 >
 > Repo + downloads: https://github.com/ciomid1097-arch/USBCam
 >
-> Feedback and bug reports welcome — it is tested on a Redmi 12 (Android 15) but camera2 is standard Android, so it should work widely.
+> Feedback and bug reports welcome — camera2 is standard Android, so it works on a wide range of phones (Android 8+).
 
 ## Reddit — r/Android, r/androidapps
 

@@ -51,13 +51,13 @@ Two tiny apps that turn your Android phone into a webcam source for your PC:
 | Close | Menu → Close |
 
 The window title (taskbar / Alt-Tab) shows the status:
-`USBCam — phone connected — 1280x720 @ 17 fps`
+`USBCam — phone connected — 1920x1080 @ 30 fps`
 
 ## Android app
 
 - The phone screen is only a control panel: front/back camera, resolution (480p up to **4K**), start/stop.
 - Opening the app starts streaming automatically.
-- **Switching resolution or camera applies instantly** — the stream never stops (the service reconfigures in place). Actual 4K depends on the phone's sensor (Redmi 12 captures 3264×2448).
+- **Switching resolution or camera applies instantly** — the stream never stops (the service reconfigures in place). Actual 4K depends on the phone's sensor.
 - A dedicated **"Switch camera"** button toggles front/back in one tap.
 - Streams in a Foreground Service + PARTIAL_WAKE_LOCK, so it keeps running with the screen off or in background.
 - Bottom of the app shows the developer contact (email + Telegram).
@@ -98,10 +98,12 @@ python -m venv .venv
 - **Android:** camera2 delivers JPEG directly (no re-encode), ImageReader with `acquireLatestImage`.
 - **Windows:** PySide6; frameless window with manual drag/resize hit-testing; optional pyvirtualcam output (capped at 1920×1080 by the OBS driver).
 
-## Test results (Redmi 12, Android 15)
+## Performance notes
 
-- 720p stream: 17–20 fps (back camera up to ~30 fps when warm); 4K: ~11 fps over USB2
-- Front/back and resolution switching without app restart ✓ (now instant, tested with rapid consecutive switches)
+- **The sensor is pinned to a constant 30 fps** (exact `[30,30]` range when the sensor offers it), so the frame rate stays stable instead of throttling in low light.
+- **JPEG quality scales with resolution** (full quality up to 1080p, tuned down above it), so 1440p/4K keeps a usable frame rate over USB2.
+- Frame rate ultimately depends on your phone's sensor and its USB chip — budget phones do less, flagships do more. USB2 links cap around 20–30 MB/s, which is the practical limit for 4K.
+- Front/back and resolution switching without app restart ✓ (instant, tested with rapid consecutive switches)
 - Client/server kill + reconnect → auto-recovery ✓
 - Killing adb server → Windows app re-establishes reverse ✓
 

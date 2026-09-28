@@ -268,10 +268,43 @@ public class JpegStreamService extends Service {
                     }
                     session = s;
                     try {
-                        requestBuilder = camera.createCaptureRequest(CameraDevice.TEMPLATE_PREVIEW);
+                        requestBuilder = camera.createCaptureRequest(CameraDevice.TEMPLATE_RECORD);
                         requestBuilder.addTarget(reader.getSurface());
                         requestBuilder.set(CaptureRequest.CONTROL_AF_MODE,
                                 CaptureRequest.CONTROL_AF_MODE_CONTINUOUS_VIDEO);
+                        // Lower JPEG quality for big frames: more fps over the same USB link.
+                        requestBuilder.set(CaptureRequest.JPEG_QUALITY, (byte) StreamConfig
+                                .jpegQualityFor(captureSize.getWidth(), captureSize.getHeight()));
+                        // Pin the sensor to its fastest supported fixed FPS range:
+                        // without this some devices idle at 7-15 fps in low light.
+                        android.util.Range<Integer>[] fpsRanges = cameraManager
+                                .getCameraCharacteristics(camera.getId())
+                                .get(CameraCharacteristics.CONTROL_AE_AVAILABLE_TARGET_FPS_RANGES);
+                        if (fpsRanges != null) {
+                            android.util.Range<Integer> best = null;
+                            // 1) Exact [30,30] first: forces constant 30 fps, no low-light throttle.
+                            for (android.util.Range<Integer> r : fpsRanges) {
+                                if (r.getLower() == 30 && r.getUpper() == 30) { best = r; break; }
+                            }
+                            // 2) Else the narrowest range that reaches 30 (e.g. [15,30] over [5,30]).
+                            if (best == null) {
+                                for (android.util.Range<Integer> r : fpsRanges) {
+                                    if (r.getUpper() >= 30
+                                            && (best == null || r.getLower() > best.getLower())) best = r;
+                                }
+                            }
+                            // 3) Else the fastest upper bound up to 60.
+                            if (best == null) {
+                                for (android.util.Range<Integer> r : fpsRanges) {
+                                    if (r.getUpper() <= 60
+                                            && (best == null || r.getUpper() > best.getUpper())) best = r;
+                                }
+                            }
+                            if (best != null) {
+                                requestBuilder.set(CaptureRequest.CONTROL_AE_TARGET_FPS_RANGE, best);
+                                Log.i(TAG, "fps range " + best);
+                            }
+                        }
                         session.setRepeatingRequest(requestBuilder.build(), null, cameraHandler);
                         Log.i(TAG, "streaming started " + captureSize);
                     } catch (CameraAccessException | IllegalStateException e) {

@@ -19,8 +19,16 @@ public final class StreamConfig {
     /** Default capture size index into SIZES. */
     public static final int DEFAULT_SIZE_INDEX = 2;
 
-    /** JPEG quality for the frames (encoder-dependent; used by JPEG encoder). */
+    /** JPEG quality for small/medium frames (encoder-dependent; used by JPEG encoder). */
     public static final int JPEG_QUALITY = 80;
+
+    /**
+     * JPEG quality scaled by resolution: large frames get a lower quality so the
+     * USB link carries more frames per second instead of more bytes per frame.
+     */
+    public static int jpegQualityFor(int width, int height) {
+        return (long) width * height > 1920L * 1080L ? 65 : JPEG_QUALITY;
+    }
 
     /**
      * Frame header, little-endian:
