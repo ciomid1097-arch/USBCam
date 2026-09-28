@@ -2,6 +2,21 @@
 
 Copy-paste these. Links are permanent (always point to the newest release).
 
+## My apps (announce together, one audience builds trust in the other)
+
+| App | What | Link |
+|---|---|---|
+| **USBCam** | Android phone → USB webcam for Windows/OBS, up to 4K | https://github.com/ciomid1097-arch/USBCam |
+| **SpiMp3** | Fully offline music player for Android — no internet permission, no ads, no telemetry; ExoPlayer, lyrics (.lrc), tag editor, playlists, OLED-dark Material 3 | https://github.com/ciomid1097-arch/SpiMp3 |
+
+SpiMp3 direct APK: https://github.com/ciomid1097-arch/SpiMp3/releases/latest
+
+> Tip: end every post with a one-liner for the other app. USBCam buyers/installs are streamers; SpiMp3 installs are privacy-minded Android users — the overlap converts both ways.
+
+---
+
+## USBCam
+
 - Repo: https://github.com/ciomid1097-arch/USBCam
 - Direct Windows download: https://github.com/ciomid1097-arch/USBCam/releases/latest/download/USBCam.exe
 - Direct Android download: https://github.com/ciomid1097-arch/USBCam/releases/latest/download/usbcam.apk
@@ -37,6 +52,31 @@ Copy-paste these. Links are permanent (always point to the newest release).
 **Title:** USBCam — free open-source app that turns your phone into a USB webcam for your PC
 
 **Body:** Use the short pitch above + the Android direct link.
+
+## SpiMp3
+
+**Title (r/androidapps, r/privacy, FOSS communities):** SpiMp3 — a fully offline music player that cannot phone home
+
+**Body:**
+> No internet permission. Not "we respect your privacy" marketing — the app literally has no network access on Android, so it cannot send anything anywhere.
+>
+> - ExoPlayer (Media3), background playback with media notification, Bluetooth/headset buttons
+> - Songs/Albums/Artists/Folders, playlists, favorites, sleep timer, playback speed
+> - Offline synced lyrics: drop a `.lrc` next to the audio file
+> - Built-in ID3 tag editor and cover art
+> - OLED-black Material 3, 5 accent colors, ~4 MB APK, Android 8+
+>
+> APK: https://github.com/ciomid1097-arch/SpiMp3/releases/latest
+>
+> Also my other tool, USBCam — phone as USB webcam for OBS: https://github.com/ciomid1097-arch/USBCam
+
+**Short pitch (X / Telegram):**
+> A music player with NO internet permission — it cannot call home even if it wanted to. Lyrics, tag editor, playlists, 4 MB, free & open source.
+> https://github.com/ciomid1097-arch/SpiMp3
+
+**Extra places:** r/fossdroid, r/degoogle, F-Droid forum, XDA, Myket/CafeBazaar (Persian stores — store/ folder in the repo already has listing texts), and Google Play (submission kit is in store/PLAY_STORE.md).
+
+---
 
 ## Where to post (best ROI first)
 
