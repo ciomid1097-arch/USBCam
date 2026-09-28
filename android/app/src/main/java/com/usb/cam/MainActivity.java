@@ -39,8 +39,7 @@ public class MainActivity extends Activity {
     private static final String TAG = "USBCam";
     /** App version shown to users; compare against the latest GitHub release tag. */
     private static final String APP_VERSION = "1.0.0";
-    /** Set to your GitHub username after creating the repository. */
-    private static final String GITHUB_OWNER = "REPLACE_OWNER";
+    private static final String GITHUB_OWNER = "ciomid1097-arch";
     private static final String GITHUB_REPO = "USBCam";
     private static final String RELEASES_PAGE =
             "https://github.com/" + GITHUB_OWNER + "/" + GITHUB_REPO + "/releases/latest";

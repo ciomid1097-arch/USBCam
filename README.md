@@ -1,6 +1,6 @@
 # USBCam — گوشی اندروید به وب‌کم USB برای PC (رایگان)
 
-> **۱۰۰٪ رایگان و متن‌باز.** خروجی‌های آماده (APK اندروید + EXE ویندوز) در بخش [Releases](https://github.com/REPLACE_OWNER/USBCam/releases/latest) قابل دانلود است.
+> **۱۰۰٪ رایگان و متن‌باز.** خروجی‌های آماده (APK اندروید + EXE ویندوز) در بخش [Releases](https://github.com/ciomid1097-arch/USBCam/releases/latest) قابل دانلود است.
 
 دو برنامه‌ی ساده: اپ اندروید تصویر دوربین را به‌صورت JPEG از طریق USB می‌فرستد، و برنامه‌ی ویندوز آن را در یک پنجره‌ی **بدون هیچ لایه‌ی اضافه** نمایش می‌دهد — مخصوص Window Capture در OBS (مثل Windowed Projector، ولی با کنترل کامل روی اندازه).
 
@@ -15,7 +15,7 @@
 
 ## دانلود
 
-همه‌چیز رایگان است — از صفحه‌ی [Releases](https://github.com/REPLACE_OWNER/USBCam/releases/latest) آخرین نسخه را بگیر:
+همه‌چیز رایگان است — از صفحه‌ی [Releases](https://github.com/ciomid1097-arch/USBCam/releases/latest) آخرین نسخه را بگیر:
 
 | فایل | توضیح |
 |---|---|
