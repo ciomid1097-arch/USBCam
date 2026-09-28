@@ -1,0 +1,20 @@
+# Build artifacts
+.venv/
+build/
+pc/dist/
+pc/__pycache__/
+android/app/build/
+*.keystore
+
+# Local junk
+ui.xml
+
+# Private licensing tools / keys — NEVER publish
+lic/
+
+# Local notes
+TODO.md
+
+# App-internal / local-only files
+.freebuff/
+*.spec
