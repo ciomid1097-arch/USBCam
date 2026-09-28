@@ -38,7 +38,7 @@ public class MainActivity extends Activity {
 
     private static final String TAG = "USBCam";
     /** App version shown to users; compare against the latest GitHub release tag. */
-    private static final String APP_VERSION = "1.0.0";
+    private static final String APP_VERSION = "1.1.0";
     private static final String GITHUB_OWNER = "ciomid1097-arch";
     private static final String GITHUB_REPO = "USBCam";
     private static final String RELEASES_PAGE =
@@ -51,6 +51,9 @@ public class MainActivity extends Activity {
     private Button toggleButton;
     private TextView statusText;
     private final AtomicBoolean updateCheckRunning = new AtomicBoolean(false);
+    /** Last settings actually sent to the service; guards the initial spinner fire. */
+    private int lastAppliedFacing = StreamConfig.FACING_BACK;
+    private int lastAppliedSizeIdx = StreamConfig.DEFAULT_SIZE_INDEX;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,9 +69,24 @@ public class MainActivity extends Activity {
         statusText.setTextSize(16);
         root.addView(statusText);
 
+        Button switchCam = new Button(this);
+        switchCam.setText("🔄 Switch camera (front / back)");
+        switchCam.setOnClickListener(v -> frontCheck.toggle()); // listener applies instantly
+        root.addView(switchCam, new LinearLayout.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT, 0));
+
         frontCheck = new CheckBox(this);
         frontCheck.setText("Use front camera");
         frontCheck.setPadding(0, 32, 0, 0);
+        // Instant camera switch while streaming (ignore the initial programmatic set).
+        frontCheck.setOnCheckedChangeListener((b, checked) -> {
+            int want = checked ? StreamConfig.FACING_FRONT : StreamConfig.FACING_BACK;
+            if (JpegStreamService.isServiceRunning() && want != lastAppliedFacing) {
+                startWithCurrentSettings();
+            } else {
+                updateStatus();
+            }
+        });
         root.addView(frontCheck);
 
         String[] labels = new String[StreamConfig.SIZES.length];
@@ -78,6 +96,18 @@ public class MainActivity extends Activity {
         sizeSpinner.setAdapter(new ArrayAdapter<>(this,
                 android.R.layout.simple_spinner_dropdown_item, labels));
         sizeSpinner.setSelection(StreamConfig.DEFAULT_SIZE_INDEX);
+        // Instant quality switch: applying the selection reconfigures the running
+        // service in place — no stop/start needed.
+        sizeSpinner.setOnItemSelectedListener(new android.widget.AdapterView.OnItemSelectedListener() {
+            @Override public void onItemSelected(android.widget.AdapterView<?> parent,
+                                                 android.view.View view, int pos, long id) {
+                // Fires once at layout time; only react to real user changes.
+                if (JpegStreamService.isServiceRunning() && pos != lastAppliedSizeIdx) {
+                    startWithCurrentSettings();
+                }
+            }
+            @Override public void onNothingSelected(android.widget.AdapterView<?> parent) { }
+        });
         root.addView(sizeSpinner);
 
         toggleButton = new Button(this);
@@ -155,6 +185,9 @@ public class MainActivity extends Activity {
 
     /** Starts the service with the UI's current camera + size selection. */
     private void startWithCurrentSettings() {
+        lastAppliedFacing = frontCheck.isChecked()
+                ? StreamConfig.FACING_FRONT : StreamConfig.FACING_BACK;
+        lastAppliedSizeIdx = sizeSpinner.getSelectedItemPosition();
         Intent i = new Intent(this, JpegStreamService.class);
         i.putExtra(JpegStreamService.EXTRA_FACING,
                 frontCheck.isChecked() ? StreamConfig.FACING_FRONT : StreamConfig.FACING_BACK);

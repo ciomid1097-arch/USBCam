@@ -48,6 +48,7 @@ public class JpegStreamService extends Service {
 
     public static final String EXTRA_SIZE_INDEX = "size_index";
     public static final String EXTRA_FACING = "facing";
+    public static final String EXTRA_FIRST_START = "first_start";
 
     private final FrameSender sender = new FrameSender();
 
@@ -56,13 +57,17 @@ public class JpegStreamService extends Service {
     private CameraManager cameraManager;
     private CameraDevice camera;
     private CameraCaptureSession session;
+    /** Bumped on every (re)create/close; stale session callbacks detect themselves. */
+    private int sessionGen = 0;
     private ImageReader reader;
     private CaptureRequest.Builder requestBuilder;
     private PowerManager.WakeLock wakeLock;
     private volatile boolean lastConnected = false;
 
     private int facing = StreamConfig.FACING_BACK;
-    private Size size = new Size(1280, 720);
+    private Size size = new Size(1920, 1080);
+    /** The size the sensor actually outputs (requested size mapped to a supported one). */
+    private Size captureSize = size;
     private int rotationDegrees = 0;
 
     @Override
@@ -92,9 +97,14 @@ public class JpegStreamService extends Service {
             idx = Math.max(0, Math.min(idx, StreamConfig.SIZES.length - 1));
             Size newSize = new Size(StreamConfig.SIZES[idx][0], StreamConfig.SIZES[idx][1]);
             boolean changed = newFacing != facing || !newSize.equals(size);
+            boolean firstStart = intent.getBooleanExtra(EXTRA_FIRST_START, false);
             facing = newFacing;
             size = newSize;
-            cameraHandler.post(() -> { if (changed || camera == null) openCameraAndStream(); });
+            if (changed || camera == null) {
+                // Reopen in place: the foreground service (and the TCP connection to the
+                // PC) stays alive, so switching quality/camera is instant on screen.
+                cameraHandler.post(this::openCameraAndStream);
+            }
         }
         startForeground(NOTIFICATION_ID, buildNotification());
         serviceRunning = true;
@@ -171,6 +181,7 @@ public class JpegStreamService extends Service {
     }
 
     private void openCameraAndStream() {
+        sender.dropStale(); // old-resolution frames must not flash after the switch
         closeCamera();
         try {
             String id = cameraIdFor(facing);
@@ -183,12 +194,15 @@ public class JpegStreamService extends Service {
                 return;
             }
             Size chosen = chooseSize(id);
+            captureSize = chosen;
             rotationDegrees = rotationFor(id);
             Log.i(TAG, "opening camera " + id + " size " + chosen + " rot " + rotationDegrees);
             cameraManager.openCamera(id, new CameraDevice.StateCallback() {
                 @Override public void onOpened(CameraDevice cam) {
                     camera = cam;
-                    startSession();
+                    // Give the just-closed old session a beat to release; fixes a
+                    // waitUntilIdle timeout on some devices (MIUI) on hot reconfig.
+                    cameraHandler.postDelayed(JpegStreamService.this::startSessionSafe, 120);
                 }
                 @Override public void onDisconnected(CameraDevice cam) { closeCamera(); }
                 @Override public void onError(CameraDevice cam, int error) {
@@ -228,9 +242,17 @@ public class JpegStreamService extends Service {
         return ((sensor - device) * facingBack + 360) % 360;
     }
 
+    /** Session starter that survives the camera being closed mid-flight (hot reconfig). */
+    private void startSessionSafe() {
+        if (camera == null) return; // reconfigured/closed again meanwhile
+        startSession();
+    }
+
     private void startSession() {
         try {
-            reader = ImageReader.newInstance(size.getWidth(), size.getHeight(),
+            final int gen = ++sessionGen;
+            // Must match the sensor's actual output size, or frames get corrupted.
+            reader = ImageReader.newInstance(captureSize.getWidth(), captureSize.getHeight(),
                     android.graphics.ImageFormat.JPEG, 3);
             reader.setOnImageAvailableListener(this::onImage, cameraHandler);
 
@@ -239,6 +261,11 @@ public class JpegStreamService extends Service {
 
             camera.createCaptureSession(surfaces, new CameraCaptureSession.StateCallback() {
                 @Override public void onConfigured(CameraCaptureSession s) {
+                    // A newer reconfig may have superseded this session mid-flight.
+                    if (gen != sessionGen || camera == null) {
+                        try { s.close(); } catch (Exception ignored) {}
+                        return;
+                    }
                     session = s;
                     try {
                         requestBuilder = camera.createCaptureRequest(CameraDevice.TEMPLATE_PREVIEW);
@@ -246,13 +273,23 @@ public class JpegStreamService extends Service {
                         requestBuilder.set(CaptureRequest.CONTROL_AF_MODE,
                                 CaptureRequest.CONTROL_AF_MODE_CONTINUOUS_VIDEO);
                         session.setRepeatingRequest(requestBuilder.build(), null, cameraHandler);
-                        Log.i(TAG, "streaming started " + size);
-                    } catch (CameraAccessException e) {
-                        Log.e(TAG, "repeating request failed", e);
+                        Log.i(TAG, "streaming started " + captureSize);
+                    } catch (CameraAccessException | IllegalStateException e) {
+                        // Never crash the camera thread on a lost race; the next
+                        // reconfig or retry brings the session back.
+                        Log.w(TAG, "repeating request failed", e);
                     }
                 }
                 @Override public void onConfigureFailed(CameraCaptureSession s) {
                     Log.e(TAG, "session configure failed");
+                    // Transient on some devices right after closing the previous
+                    // session (e.g. MIUI): retry once from a clean state.
+                    final int gen = sessionGen;
+                    cameraHandler.postDelayed(() -> {
+                        if (camera != null && session == null && gen == sessionGen) {
+                            openCameraAndStream();
+                        }
+                    }, 300);
                 }
             }, cameraHandler);
         } catch (CameraAccessException e) {
@@ -267,6 +304,7 @@ public class JpegStreamService extends Service {
     }
 
     private void closeSessionOnly() {
+        sessionGen++; // invalidate any pending session callbacks
         if (session != null) { try { session.close(); } catch (Exception ignored) {} session = null; }
         if (reader != null) { reader.close(); reader = null; }
     }

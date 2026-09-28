@@ -12,10 +12,12 @@ public final class StreamConfig {
             {640, 480},
             {1280, 720},
             {1920, 1080},
+            {2560, 1440},
+            {3840, 2160},
     };
 
     /** Default capture size index into SIZES. */
-    public static final int DEFAULT_SIZE_INDEX = 1;
+    public static final int DEFAULT_SIZE_INDEX = 2;
 
     /** JPEG quality for the frames (encoder-dependent; used by JPEG encoder). */
     public static final int JPEG_QUALITY = 80;
