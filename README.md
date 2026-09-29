@@ -8,10 +8,10 @@ One click — these links always point to the newest release:
 
 | Platform | Download | Requirements |
 |---|---|---|
-| 🪟 **Windows app** | **[Download USBCam.exe](https://github.com/ciomid1097-arch/USBCam/releases/latest/download/USBCam.exe)** | Windows 10 or 11 (64-bit) — run it, no install |
-| 📱 **Android app** | **[Download usbcam.apk](https://github.com/ciomid1097-arch/USBCam/releases/latest/download/usbcam.apk)** | Android 8+ — install directly (allow "unknown apps") |
+| 🪟 **Windows app** | **[Download USBCam.exe](https://github.com/studiospike/USBCam/releases/latest/download/USBCam.exe)** | Windows 10 or 11 (64-bit) — run it, no install |
+| 📱 **Android app** | **[Download usbcam.apk](https://github.com/studiospike/USBCam/releases/latest/download/usbcam.apk)** | Android 8+ — install directly (allow "unknown apps") |
 
-All releases: [Releases page](https://github.com/ciomid1097-arch/USBCam/releases)
+All releases: [Releases page](https://github.com/studiospike/USBCam/releases)
 
 ## What is this?
 

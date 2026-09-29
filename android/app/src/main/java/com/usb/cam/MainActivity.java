@@ -37,7 +37,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 public class MainActivity extends Activity {
 
     private static final String TAG = "USBCam";
-    private static final String GITHUB_OWNER = "ciomid1097-arch";
+    private static final String GITHUB_OWNER = "studiospike";
     private static final String GITHUB_REPO = "USBCam";
     /** Direct download of the latest release APK (permanent GitHub redirect). */
     private static final String LATEST_APK_URL =

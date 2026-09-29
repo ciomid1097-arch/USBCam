@@ -6,10 +6,10 @@ Copy-paste these. Links are permanent (always point to the newest release).
 
 | App | What | Link |
 |---|---|---|
-| **USBCam** | Android phone → USB webcam for Windows/OBS, up to 4K | https://github.com/ciomid1097-arch/USBCam |
-| **SpiMp3** | Fully offline music player for Android — no internet permission, no ads, no telemetry; ExoPlayer, lyrics (.lrc), tag editor, playlists, OLED-dark Material 3 | https://github.com/ciomid1097-arch/SpiMp3 |
+| **USBCam** | Android phone → USB webcam for Windows/OBS, up to 4K | https://github.com/studiospike/USBCam |
+| **SpiMp3** | Fully offline music player for Android — no internet permission, no ads, no telemetry; ExoPlayer, lyrics (.lrc), tag editor, playlists, OLED-dark Material 3 | https://github.com/studiospike/SpiMp3 |
 
-SpiMp3 direct APK: https://github.com/ciomid1097-arch/SpiMp3/releases/latest
+SpiMp3 direct APK: https://github.com/studiospike/SpiMp3/releases/latest
 
 > Tip: end every post with a one-liner for the other app. USBCam buyers/installs are streamers; SpiMp3 installs are privacy-minded Android users — the overlap converts both ways.
 
@@ -17,9 +17,9 @@ SpiMp3 direct APK: https://github.com/ciomid1097-arch/SpiMp3/releases/latest
 
 ## USBCam
 
-- Repo: https://github.com/ciomid1097-arch/USBCam
-- Direct Windows download: https://github.com/ciomid1097-arch/USBCam/releases/latest/download/USBCam.exe
-- Direct Android download: https://github.com/ciomid1097-arch/USBCam/releases/latest/download/usbcam.apk
+- Repo: https://github.com/studiospike/USBCam
+- Direct Windows download: https://github.com/studiospike/USBCam/releases/latest/download/USBCam.exe
+- Direct Android download: https://github.com/studiospike/USBCam/releases/latest/download/usbcam.apk
 
 ## Short pitch (X / Twitter, Telegram channels)
 
@@ -28,7 +28,7 @@ SpiMp3 direct APK: https://github.com/ciomid1097-arch/SpiMp3/releases/latest
 > - up to 4K, instant quality/camera switching
 > - virtual cam for Meet/Zoom/Discord
 > - no ads, no account, open source
-> https://github.com/ciomid1097-arch/USBCam
+> https://github.com/studiospike/USBCam
 
 ## Reddit — r/obs, r/Twitch, r/streaming (post title + body)
 
@@ -43,7 +43,7 @@ SpiMp3 direct APK: https://github.com/ciomid1097-arch/SpiMp3/releases/latest
 > - Windows 10/11, no install; Android 8+, tiny 25 KB APK
 > - 100% free, open source, no ads/accounts
 >
-> Repo + downloads: https://github.com/ciomid1097-arch/USBCam
+> Repo + downloads: https://github.com/studiospike/USBCam
 >
 > Feedback and bug reports welcome — camera2 is standard Android, so it works on a wide range of phones (Android 8+).
 
@@ -66,13 +66,13 @@ SpiMp3 direct APK: https://github.com/ciomid1097-arch/SpiMp3/releases/latest
 > - Built-in ID3 tag editor and cover art
 > - OLED-black Material 3, 5 accent colors, ~4 MB APK, Android 8+
 >
-> APK: https://github.com/ciomid1097-arch/SpiMp3/releases/latest
+> APK: https://github.com/studiospike/SpiMp3/releases/latest
 >
-> Also my other tool, USBCam — phone as USB webcam for OBS: https://github.com/ciomid1097-arch/USBCam
+> Also my other tool, USBCam — phone as USB webcam for OBS: https://github.com/studiospike/USBCam
 
 **Short pitch (X / Telegram):**
 > A music player with NO internet permission — it cannot call home even if it wanted to. Lyrics, tag editor, playlists, 4 MB, free & open source.
-> https://github.com/ciomid1097-arch/SpiMp3
+> https://github.com/studiospike/SpiMp3
 
 **Extra places:** r/fossdroid, r/degoogle, F-Droid forum, XDA, Myket/CafeBazaar (Persian stores — store/ folder in the repo already has listing texts), and Google Play (submission kit is in store/PLAY_STORE.md).
 
@@ -86,7 +86,7 @@ SpiMp3 direct APK: https://github.com/ciomid1097-arch/SpiMp3/releases/latest
 4. **X (Twitter)** — tag @OBSProject; post a 20s screen recording of the frameless window in OBS.
 5. **Telegram channels** — Persian tech channels (digikala mag community, androidir, etc.) and streaming channels; Persian users pay for iVCam/DroidCam Pro, so "free" hits hard. Use this Persian line:
    > دوربین گوشی اندرویدت رو رایگان به وب‌کم ویندوز تبدیل کن — مخصوص OBS، تا 4K، متن‌باز و بدون تبلیغ:
-   > https://github.com/ciomid1097-arch/USBCam
+   > https://github.com/studiospike/USBCam
 6. **GitHub Trending** — comes naturally: share on X/Reddit the same day; stars in 24-48h push it to Trending for the day.
 7. **r/gamedev / VTuber communities** (r/VirtualYoutubers) — phone camera is a common cheap facecam.
 8. **YouTube comments** on popular "how to use phone as webcam in OBS" videos — comment with the direct link (this actually converts well).
