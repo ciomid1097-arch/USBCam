@@ -1,6 +1,6 @@
 # USBCam — Use your Android phone as a USB webcam for PC / OBS
 
-> **100% free & open source.** No ads, no account, no internet required — everything goes over the USB cable.
+> **100% free & open source** (GPL-3.0). No ads, no account, no internet required — everything goes over the USB cable.
 
 ## ⬇️ Download (Windows & Android)
 
@@ -118,3 +118,11 @@ python -m venv .venv
 
 - Email: workspikestudio@gmail.com
 - Telegram: [@spike_c](https://t.me/spike_c)
+
+## License
+
+Copyright © 2026 workspikestudio.
+
+This program is free software: you can redistribute it and/or modify it under the terms of the **GNU General Public License v3.0** — see the [LICENSE](LICENSE) file.
+
+In short: you may use, study, share and modify this code, but any fork or derivative (including repackaged builds) must also be released under GPL-3.0 with full source, and must keep the original copyright notice. Selling a closed-source copy of this app is not permitted.
