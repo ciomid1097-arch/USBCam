@@ -37,12 +37,12 @@ import java.util.concurrent.atomic.AtomicBoolean;
 public class MainActivity extends Activity {
 
     private static final String TAG = "USBCam";
-    /** App version shown to users; compare against the latest GitHub release tag. */
-    private static final String APP_VERSION = "1.1.1";
     private static final String GITHUB_OWNER = "ciomid1097-arch";
     private static final String GITHUB_REPO = "USBCam";
-    private static final String RELEASES_PAGE =
-            "https://github.com/" + GITHUB_OWNER + "/" + GITHUB_REPO + "/releases/latest";
+    /** Direct download of the latest release APK (permanent GitHub redirect). */
+    private static final String LATEST_APK_URL =
+            "https://github.com/" + GITHUB_OWNER + "/" + GITHUB_REPO
+                    + "/releases/latest/download/usbcam.apk";
     private static final String RELEASES_API =
             "https://api.github.com/repos/" + GITHUB_OWNER + "/" + GITHUB_REPO + "/releases/latest";
 
@@ -257,9 +257,19 @@ public class MainActivity extends Activity {
 
     /**
      * Checks GitHub for a newer release in the background. If one exists, shows a
-     * dialog with a Download button that opens the releases page. Never blocks or
-     * disturbs the user: any network/parse error is silently ignored.
+     * dialog with a Download button that opens the latest APK directly. Never
+     * blocks or disturbs the user: any network/parse error is silently ignored.
      */
+    /** App version, taken from the APK manifest so it always matches
+     *  "Settings → Apps → USBCam" on the phone. */
+    private String appVersion() {
+        try {
+            return getPackageManager().getPackageInfo(getPackageName(), 0).versionName;
+        } catch (Exception e) {
+            return "?";
+        }
+    }
+
     private void checkForUpdate() {
         if (GITHUB_OWNER.equals("REPLACE_OWNER")) return; // repo not configured yet
         if (!updateCheckRunning.compareAndSet(false, true)) return;
@@ -279,16 +289,17 @@ public class MainActivity extends Activity {
                 String tag = extractJsonString(sb.toString(), "tag_name");
                 if (TextUtils.isEmpty(tag)) throw new Exception("no tag_name");
                 String latest = tag.startsWith("v") ? tag.substring(1) : tag;
-                if (isNewerVersion(latest, APP_VERSION)) {
+                String local = appVersion();
+                if (isNewerVersion(latest, local)) {
                     String message = "Version " + latest + " is available.\nYou are using "
-                            + APP_VERSION + ".";
+                            + local + ".";
                     runOnUiThread(() -> {
                         if (isFinishing() || isDestroyed()) return;
                         new android.app.AlertDialog.Builder(this)
                                 .setTitle("Update available")
                                 .setMessage(message)
                                 .setPositiveButton("Download",
-                                        (DialogInterface d, int w) -> openUrl(RELEASES_PAGE))
+                                        (DialogInterface d, int w) -> openUrl(LATEST_APK_URL))
                                 .setNegativeButton("Later", null)
                                 .show();
                     });
